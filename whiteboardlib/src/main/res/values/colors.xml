@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gray">#eeeeee</color>
+    <color name="com_bg_gray">#aaaaaaaa</color>
+    <color name="text_color_black">#454545</color>
+    <color name="text_color_red">#d80317</color>
+</resources>
