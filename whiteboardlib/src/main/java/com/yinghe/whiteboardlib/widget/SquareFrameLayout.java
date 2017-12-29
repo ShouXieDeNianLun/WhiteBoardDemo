@@ -1,4 +1,4 @@
-package com.yinghe.whiteboardlib.ui;
+package com.yinghe.whiteboardlib.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;

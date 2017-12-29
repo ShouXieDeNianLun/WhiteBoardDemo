@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import com.yinghe.whiteboardlib.MultiImageSelectorFragment;
 import com.yinghe.whiteboardlib.R;
 import com.yinghe.whiteboardlib.bean.Folder;
-import com.yinghe.whiteboardlib.fragment.WhiteBoardFragment;
+import com.yinghe.whiteboardlib.ui.WhiteBoardFragment;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -42,7 +42,7 @@ import com.yinghe.whiteboardlib.adapter.FolderAdapter;
 import com.yinghe.whiteboardlib.adapter.ImageGridAdapter;
 import com.yinghe.whiteboardlib.bean.Folder;
 import com.yinghe.whiteboardlib.bean.Image;
-import com.yinghe.whiteboardlib.fragment.WhiteBoardFragment;
+import com.yinghe.whiteboardlib.ui.WhiteBoardFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;

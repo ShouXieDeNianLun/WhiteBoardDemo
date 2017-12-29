@@ -17,10 +17,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
-import com.yinghe.whiteboardlib.Utils.ScreenUtils;
-import com.yinghe.whiteboardlib.fragment.WhiteBoardFragment;
+import com.yinghe.whiteboardlib.ui.WhiteBoardFragment;
 
 import java.io.File;
 import java.util.ArrayList;

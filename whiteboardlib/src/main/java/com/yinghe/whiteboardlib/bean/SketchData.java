@@ -2,9 +2,8 @@ package com.yinghe.whiteboardlib.bean;
 
 import android.graphics.Bitmap;
 
-import com.yinghe.whiteboardlib.view.SketchView;
+import com.yinghe.whiteboardlib.widget.SketchView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

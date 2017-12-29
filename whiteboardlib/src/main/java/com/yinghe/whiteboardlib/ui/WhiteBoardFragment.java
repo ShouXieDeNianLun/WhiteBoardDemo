@@ -1,4 +1,4 @@
-package com.yinghe.whiteboardlib.fragment;
+package com.yinghe.whiteboardlib.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -44,7 +44,7 @@ import com.yinghe.whiteboardlib.Utils.TimeUtils;
 import com.yinghe.whiteboardlib.adapter.SketchDataGridAdapter;
 import com.yinghe.whiteboardlib.bean.SketchData;
 import com.yinghe.whiteboardlib.bean.StrokeRecord;
-import com.yinghe.whiteboardlib.view.SketchView;
+import com.yinghe.whiteboardlib.widget.SketchView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -103,6 +103,7 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
     ImageView btn_empty;//清空
     ImageView btn_send;//推送
     ImageView btn_send_space;//推送按钮间隔
+    ImageView btn_zujian;//组件
 
 
     RadioGroup strokeTypeRG, strokeColorRG;
@@ -124,7 +125,7 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
 
     SendBtnCallback sendBtnCallback;
     boolean isTeacher;
-    PopupWindow strokePopupWindow, eraserPopupWindow, textPopupWindow;//画笔、橡皮擦参数设置弹窗实例
+    PopupWindow strokePopupWindow, eraserPopupWindow, textPopupWindow,zujianPopupWindow;//画笔、橡皮擦,组件参数设置弹窗实例
     private View popupStrokeLayout, popupEraserLayout, popupTextLayout;//画笔、橡皮擦弹窗布局
     private SeekBar strokeSeekBar, strokeAlphaSeekBar, eraserSeekBar;
     private ImageView strokeImageView, strokeAlphaImage, eraserImageView;//画笔宽度，画笔不透明度，橡皮擦宽度IV
@@ -238,6 +239,10 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //取消状态栏
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         final View rootView = inflater.inflate(R.layout.fragment_white_board, container, false);
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -511,6 +516,7 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
 
     private void findView(View view) {
 
+
         //初始化抽屉
         slidingMenu = new SlidingMenu(getActivity());
         //左滑菜单
@@ -522,7 +528,7 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
         //设置阴影效果
 //        slidingMenu.setShadowDrawable(R.mipmap.ic_launcher_round);
         //设置滑动菜单的宽度
-        slidingMenu.setBehindWidth(388);
+        slidingMenu.setBehindWidth(470);
         //菜单距离主页面的距离
 //        slidingMenu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 
@@ -542,6 +548,7 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
 
         controlLayout = view.findViewById(R.id.controlLayout);
 
+
         btn_add = (ImageView) view.findViewById(R.id.btn_add);
         btn_stroke = (ImageView) view.findViewById(R.id.btn_stroke);
         btn_eraser = (ImageView) view.findViewById(R.id.btn_eraser);
@@ -554,6 +561,8 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
         btn_empty = (ImageView) view.findViewById(R.id.btn_empty);
         btn_send = (ImageView) view.findViewById(R.id.btn_send);
         btn_drawer = (ImageView) view.findViewById(R.id.btn_drawer);
+        btn_zujian=(ImageView)view.findViewById(R.id.btn_zujian) ;
+
         btn_send_space = (ImageView) view.findViewById(R.id.btn_send_space);
         if (isTeacher) {
             btn_send.setVisibility(View.VISIBLE);
@@ -574,6 +583,7 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
         btn_drag.setOnClickListener(this);
         btn_drawer.setOnClickListener(this);
         btn_send.setOnClickListener(this);
+        btn_zujian.setOnClickListener(this);
         mSketchView.setTextWindowCallback(new SketchView.TextWindowCallback() {
             @Override
             public void onText(View anchor, StrokeRecord record) {
@@ -734,7 +744,11 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
         } else if (id == R.id.btn_drag) {
             mSketchView.setEditMode(SketchView.EDIT_PHOTO);
             showBtn(btn_drag);
-        } else if (id == R.id.btn_send) {
+        }else if (id==R.id.btn_zujian){
+
+        }
+
+        else if (id == R.id.btn_send) {
             if (sendBtnCallback != null) {
                 new Thread(new Runnable() {
                     @Override
