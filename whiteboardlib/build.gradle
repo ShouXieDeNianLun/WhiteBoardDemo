@@ -24,6 +24,7 @@ dependencies {
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'com.github.zcweng:switch-button:0.0.3@aar'
     compile project(':library')
 }
 

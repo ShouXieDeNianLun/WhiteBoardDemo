@@ -13,6 +13,7 @@ public class StrokeRecord {
     public static final int STROKE_TYPE_CIRCLE = 4;
     public static final int STROKE_TYPE_RECTANGLE = 5;
     public static final int STROKE_TYPE_TEXT = 6;
+    public static final int STROKE_TYPE_ZuJian = 6;
 
     public int type;//记录类型
     public Paint paint;//笔类

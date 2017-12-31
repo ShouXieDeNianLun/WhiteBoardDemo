@@ -32,10 +32,12 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.suke.widget.SwitchButton;
 import com.yinghe.whiteboardlib.MultiImageSelector;
 import com.yinghe.whiteboardlib.R;
 import com.yinghe.whiteboardlib.Utils.BitmapUtils;
@@ -63,6 +65,10 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
     final String TAG = getClass().getSimpleName();
     private ImageView btn_drawer;
     private SlidingMenu slidingMenu;
+    private ImageView btn_xingzhuang;
+    private PopupWindow xingzhuangPopwindow;
+    private SwitchButton xingzhuangSwitchButton;
+    private SeekBar xingzhuangSeekbar;
 
     public interface SendBtnCallback {
         void onSendBtnClick(File filePath);
@@ -126,7 +132,7 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
     SendBtnCallback sendBtnCallback;
     boolean isTeacher;
     PopupWindow strokePopupWindow, eraserPopupWindow, textPopupWindow,zujianPopupWindow;//画笔、橡皮擦,组件参数设置弹窗实例
-    private View popupStrokeLayout, popupEraserLayout, popupTextLayout;//画笔、橡皮擦弹窗布局
+    private View popupStrokeLayout, popupEraserLayout, popupTextLayout,popZuJianLayout,popXingZhuangLayout;//画笔、橡皮擦弹窗布局
     private SeekBar strokeSeekBar, strokeAlphaSeekBar, eraserSeekBar;
     private ImageView strokeImageView, strokeAlphaImage, eraserImageView;//画笔宽度，画笔不透明度，橡皮擦宽度IV
     private EditText strokeET;//绘制文字的内容
@@ -360,12 +366,15 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
         assert circleDrawable != null;
         size = circleDrawable.getIntrinsicWidth();
     }
-
+                //初始化
     private void initPopupWindows() {
         initStrokePop();
         initEraserPop();
         initTextPop();
+        initZuJianPop();
+        initXingZhuangPop();
     }
+
 
     private void initTextPop() {
         textPopupWindow = new PopupWindow(activity);
@@ -385,16 +394,24 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
             }
         });
     }
+    private void initZuJianPop(){
+
+        zujianPopupWindow=new PopupWindow(activity);
+        zujianPopupWindow.setContentView(popZuJianLayout);
+        zujianPopupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        zujianPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        zujianPopupWindow.setFocusable(true);
+
+
+    }
 
     private void initEraserPop() {
         //橡皮擦弹窗
         eraserPopupWindow = new PopupWindow(activity);
         eraserPopupWindow.setContentView(popupEraserLayout);//设置主体布局
-        eraserPopupWindow.setWidth(ScreenUtils.dip2px(getActivity(), pupWindowsDPWidth));//宽度200dp
-//        eraserPopupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);//高度自适应
-        eraserPopupWindow.setHeight(ScreenUtils.dip2px(getActivity(), eraserPupWindowsDPHeight));//高度自适应
+        eraserPopupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        eraserPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         eraserPopupWindow.setFocusable(true);
-        eraserPopupWindow.setBackgroundDrawable(new BitmapDrawable());//设置空白背景
         eraserPopupWindow.setAnimationStyle(R.style.mypopwindow_anim_style);//动画
         //橡皮擦宽度拖动条
         eraserSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -415,6 +432,32 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
             }
         });
         eraserSeekBar.setProgress(SketchView.DEFAULT_ERASER_SIZE);
+    }
+
+    private void initXingZhuangPop() {
+        xingzhuangPopwindow = new PopupWindow(activity);
+        xingzhuangPopwindow.setContentView(popXingZhuangLayout);
+        xingzhuangPopwindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        xingzhuangPopwindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        xingzhuangPopwindow.setFocusable(true);
+        xingzhuangSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        //默认大小
+//        xingzhuangSeekbar.setProgress(50);
     }
 
     private void initStrokePop() {
@@ -538,9 +581,6 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
         //为侧滑菜单设置布局
         slidingMenu.setMenu(R.layout.left_menu);
 
-
-
-
         sketchGV = (GridView) view.findViewById(R.id.sketch_data_gv);
 
         //画板整体布局
@@ -561,6 +601,7 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
         btn_empty = (ImageView) view.findViewById(R.id.btn_empty);
         btn_send = (ImageView) view.findViewById(R.id.btn_send);
         btn_drawer = (ImageView) view.findViewById(R.id.btn_drawer);
+        btn_xingzhuang = (ImageView)view.findViewById(R.id.btn_xinghzunag);
         btn_zujian=(ImageView)view.findViewById(R.id.btn_zujian) ;
 
         btn_send_space = (ImageView) view.findViewById(R.id.btn_send_space);
@@ -583,6 +624,7 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
         btn_drag.setOnClickListener(this);
         btn_drawer.setOnClickListener(this);
         btn_send.setOnClickListener(this);
+        btn_xingzhuang.setOnClickListener(this);
         btn_zujian.setOnClickListener(this);
         mSketchView.setTextWindowCallback(new SketchView.TextWindowCallback() {
             @Override
@@ -610,9 +652,17 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
         popupEraserLayout = inflater.inflate(R.layout.popup_sketch_eraser, null);
         eraserImageView = (ImageView) popupEraserLayout.findViewById(R.id.stroke_circle);
         eraserSeekBar = (SeekBar) (popupEraserLayout.findViewById(R.id.stroke_seekbar));
+
+        //形状弹框布局
+        popXingZhuangLayout=inflater.inflate(R.layout.popup_sketch_xingzhuang,null);
+        xingzhuangSwitchButton = (SwitchButton)popXingZhuangLayout.findViewById(R.id.xingzhuang_switch);
+        xingzhuangSeekbar = (SeekBar)popXingZhuangLayout.findViewById(R.id.stroke_xingzhuangchicui);
         //文本录入弹窗布局
         popupTextLayout = inflater.inflate(R.layout.popup_sketch_text, null);
         strokeET = (EditText) popupTextLayout.findViewById(R.id.text_pupwindow_et);
+
+        popZuJianLayout=inflater.inflate(R.layout.popup_sketch_zujian,null);
+
         getSketchSize();//计算选择图片弹窗的高宽
     }
 
@@ -717,10 +767,11 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
             showBtn(btn_stroke);
         } else if (id == R.id.btn_eraser) {
             if (mSketchView.getEditMode() == SketchView.EDIT_STROKE && mSketchView.getStrokeType() == STROKE_TYPE_ERASER) {
-                showParamsPopupWindow(v, STROKE_TYPE_ERASER);
+                eraserPopupWindow.showAsDropDown(v,v.getWidth()/2,-v.getHeight(),Gravity.RIGHT);
             } else {
                 mSketchView.setStrokeType(STROKE_TYPE_ERASER);
             }
+
             mSketchView.setEditMode(SketchView.EDIT_STROKE);
             showBtn(btn_eraser);
         } else if (id == R.id.btn_undo) {
@@ -734,7 +785,7 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
                 Toast.makeText(getActivity(), "您还没有绘图", Toast.LENGTH_SHORT).show();
             } else {
                 showSaveDialog();
-            }
+             }
         }else if (id==R.id.btn_drawer){
             slidingMenu.showMenu();
         }else if (id == R.id.btn_photo) {
@@ -744,8 +795,11 @@ public class WhiteBoardFragment extends Fragment implements SketchView.OnDrawCha
         } else if (id == R.id.btn_drag) {
             mSketchView.setEditMode(SketchView.EDIT_PHOTO);
             showBtn(btn_drag);
-        }else if (id==R.id.btn_zujian){
+        }else  if (id==R.id.btn_xinghzunag){
+            xingzhuangPopwindow.showAsDropDown(v,v.getWidth()/2,-v.getHeight()*4,Gravity.RIGHT);
 
+        } else if (id==R.id.btn_zujian){
+            zujianPopupWindow.showAsDropDown(v,v.getWidth()/2,-v.getHeight(),Gravity.RIGHT);
         }
 
         else if (id == R.id.btn_send) {
